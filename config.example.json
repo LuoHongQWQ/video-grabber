@@ -1,0 +1,19 @@
+{
+  "site_name": "无痕视频下载",
+  "auth": {
+    "enabled": true,
+    "password": "",
+    "secret": ""
+  },
+  "limits": {
+    "max_concurrent_jobs": 2
+  },
+  "donation": {
+    "title": "支持这个项目",
+    "subtitle": "如果它帮你节省了时间，欢迎请作者喝一杯咖啡",
+    "alipay_qr": "",
+    "wechat_qr": "",
+    "afdian_url": "",
+    "note": "收款码可在 config.json 中替换为你自己的图片路径或链接。"
+  }
+}

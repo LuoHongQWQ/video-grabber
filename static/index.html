@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>无痕视频下载 · 全平台去水印高清视频</title>
+<meta name="description" content="支持抖音、B站、小红书、快手视频去水印下载，可单独提取音频、封面，并一键提升分辨率与帧率。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M26 22l18 10-18 10z' fill='white'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+<div class="bg">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+  <div class="grid"></div>
+</div>
+
+<header class="nav">
+  <a class="brand" href="#top">
+    <span class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l11-6.5L8 5.5z" fill="currentColor"/></svg>
+    </span>
+    <span class="brand-text">无痕<em>视频下载</em></span>
+  </a>
+  <nav class="nav-links">
+    <a href="#parse">下载</a>
+    <a href="#enhance">画质增强</a>
+    <a href="#donate">支持作者</a>
+    <button class="link-btn" id="guideBtn">使用说明</button>
+    <button class="link-btn" id="logoutBtn">退出</button>
+  </nav>
+  <div class="engine-badge" id="healthBadge">
+    <span class="dot"></span><span id="healthText">检测引擎…</span>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="pill">
+      <span class="pill-dot"></span>
+      抖音 · B站 · 小红书 · 快手
+    </div>
+    <h1>粘贴链接，<span class="grad">拿走无水印原画</span></h1>
+    <p class="hero-sub">自动抓取平台原始视频流，不压缩、不带水印。视频、音频、封面任意保存，还能一键提升分辨率与帧率。</p>
+    <div class="platform-row">
+      <span class="platform-chip" data-p="douyin"><i>抖</i>抖音</span>
+      <span class="platform-chip" data-p="bilibili"><i>B</i>哔哩哔哩</span>
+      <span class="platform-chip" data-p="xiaohongshu"><i>红</i>小红书</span>
+      <span class="platform-chip" data-p="kuaishou"><i>快</i>快手</span>
+    </div>
+  </section>
+
+  <section class="panel parse-panel" id="parse">
+    <form id="parseForm" autocomplete="off">
+      <div class="input-wrap">
+        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11 4.9"/>
+          <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L13 19.1"/>
+        </svg>
+        <input id="urlInput" type="text" placeholder="粘贴视频链接或分享口令，例如：https://v.douyin.com/…" />
+        <button type="button" class="paste-btn" id="pasteBtn">粘贴</button>
+      </div>
+      <div class="parse-actions">
+        <button type="submit" class="btn-primary" id="parseBtn">
+          <span class="spinner"></span>
+          <span class="btn-text">解析视频</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="parse-hint">支持直接粘贴 App 分享内容，自动识别链接</p>
+      </div>
+    </form>
+    <div class="error-box" id="errorBox"></div>
+    <div class="feature-strip">
+      <div><span>01</span>无水印原画</div>
+      <div><span>02</span>视频 / 音频 / 封面</div>
+      <div><span>03</span>1080P · 2K · 4K</div>
+      <div><span>04</span>插帧至 60 / 120fps</div>
+    </div>
+  </section>
+
+  <section class="result hidden" id="resultSection">
+    <div class="result-card">
+      <div class="cover-wrap">
+        <img id="coverImg" alt="视频封面" />
+        <span class="duration-badge" id="durationBadge">00:00</span>
+        <span class="platform-tag" id="platformTag">平台</span>
+      </div>
+      <div class="result-info">
+        <h2 id="videoTitle">视频标题</h2>
+        <div class="meta-row">
+          <span class="author" id="videoAuthor"></span>
+          <span class="meta-dot">·</span>
+          <span id="videoMeta"></span>
+        </div>
+        <p class="desc" id="videoDesc"></p>
+
+        <div class="quality-block">
+          <div class="block-title">选择清晰度</div>
+          <div class="quality-list" id="qualityList"></div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-primary" id="downloadVideoBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>
+            下载视频
+          </button>
+          <button class="btn-ghost" id="downloadAudioBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
+            下载音频
+          </button>
+          <button class="btn-ghost" id="downloadCoverBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4.5 17l4.5-4.5 4 4 3-3 3.5 3.5"/></svg>
+            下载封面
+          </button>
+          <button class="btn-ghost" id="previewBtn">预览</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="enhance hidden" id="enhanceSection">
+    <div class="section-head">
+      <div>
+        <h2>画质增强与水印处理</h2>
+        <p>Lanczos 重采样提升分辨率，帧间插值提升帧率，并可对已烧录的平台角标做 delogo 去除。</p>
+      </div>
+      <span class="warn-chip">耗时较长 · 建议短片使用</span>
+    </div>
+    <div class="enhance-grid">
+      <div class="option-group">
+        <div class="option-label">目标分辨率</div>
+        <div class="segmented" id="resOptions">
+          <button data-height="0" class="active">保持原画</button>
+          <button data-height="1080">1080P</button>
+          <button data-height="1440">2K</button>
+          <button data-height="2160">4K</button>
+        </div>
+      </div>
+      <div class="option-group">
+        <div class="option-label">目标帧率</div>
+        <div class="segmented" id="fpsOptions">
+          <button data-fps="0" class="active">保持原帧率</button>
+          <button data-fps="60">60 FPS</button>
+          <button data-fps="120">120 FPS</button>
+        </div>
+      </div>
+      <div class="option-group">
+        <div class="option-label">插帧方式</div>
+        <div class="segmented" id="modeOptions">
+          <button data-mode="fast" class="active">快速混合</button>
+          <button data-mode="quality">精细运动补偿</button>
+        </div>
+      </div>
+      <div class="option-group">
+        <div class="option-label">水印处理</div>
+        <div class="segmented" id="watermarkOptions">
+          <button data-corner="none" class="active">不处理</button>
+          <button data-corner="top-right">右上角</button>
+          <button data-corner="top-left">左上角</button>
+          <button data-corner="bottom-right">右下角</button>
+          <button data-corner="bottom-left">左下角</button>
+        </div>
+      </div>
+      <div class="option-group hidden" id="wmSizeGroup">
+        <div class="option-label">水印范围</div>
+        <div class="segmented" id="wmSizeOptions">
+          <button data-size="small">小</button>
+          <button data-size="medium" class="active">中</button>
+          <button data-size="large">大（去不干净时选这个）</button>
+        </div>
+      </div>
+      <div class="option-group hidden" id="wmModeGroup">
+        <div class="option-label">去除方式</div>
+        <div class="segmented" id="wmModeOptions">
+          <button data-wm-mode="mask" class="active">精准修复（更自然）</button>
+          <button data-wm-mode="delogo">插值修复</button>
+          <button data-wm-mode="cover">纯色遮盖</button>
+        </div>
+      </div>
+      <div class="enhance-action">
+        <button class="btn-primary" id="enhanceBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.5"/></svg>
+          生成新视频
+        </button>
+        <p class="tip">「精准修复」会自动定位角落水印的字形范围，逐帧估算每个像素被白色水印抬亮的比例，只补回这些笔画；旁边的「公告」、按钮、Esc 等原画面内容保持不动，多色背景下同样适用。识别失败时会退回整块插值修复。若仍有残留，可把「水印范围」调大或改用「纯色遮盖」（会留黑块但 100% 盖住）。B站播放器悬浮层不在视频里，下载后本来就没有。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="queue hidden" id="queueSection">
+    <div class="section-head">
+      <div>
+        <h2>任务队列</h2>
+        <p>下载与转码在后台进行，完成后可直接保存文件。</p>
+      </div>
+      <button class="link-btn" id="clearQueueBtn">清空已完成</button>
+    </div>
+    <div class="queue-list" id="queueList"></div>
+  </section>
+
+  <section class="donate" id="donate">
+    <div class="donate-glow"></div>
+    <div class="donate-head">
+      <h2 id="donateTitle">支持这个项目</h2>
+      <p id="donateSubtitle">如果它帮你节省了时间，欢迎请作者喝一杯咖啡</p>
+    </div>
+    <div class="donate-body">
+      <div class="qr-card alipay">
+        <div class="qr-title"><span class="qr-logo">支</span>支付宝</div>
+        <div class="qr-box" id="alipayQr"><span>收款码待配置</span></div>
+        <p>打开支付宝扫码</p>
+      </div>
+      <div class="qr-card wechat">
+        <div class="qr-title"><span class="qr-logo">微</span>微信支付</div>
+        <div class="qr-box" id="wechatQr"><span>收款码待配置</span></div>
+        <p>打开微信扫码</p>
+      </div>
+      <div class="donate-extra">
+        <div class="heart">♡</div>
+        <h3>让工具保持免费</h3>
+        <p>你的支持会用于服务器与带宽开销，以及后续接入更多平台。</p>
+        <a class="btn-ghost afdian" id="afdianLink" href="#" target="_blank" rel="noopener">前往爱发电</a>
+        <p class="donate-note" id="donateNote"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="guide" id="guideSection">
+    <div class="section-head">
+      <div>
+        <h2>三步搞定</h2>
+        <p>无需安装浏览器插件，链接粘贴即解析。</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><span>1</span><h3>复制链接</h3><p>在 App 或网页端点击「分享 → 复制链接」。</p></div>
+      <div class="step"><span>2</span><h3>粘贴解析</h3><p>把链接或整段分享口令粘贴到上方输入框。</p></div>
+      <div class="step"><span>3</span><h3>选择保存</h3><p>挑选清晰度，下载视频、音频或封面。</p></div>
+    </div>
+    <details class="faq">
+      <summary>为什么有些平台需要配置 cookies？</summary>
+      <p>小红书、B站高清、部分抖音内容需要登录态才能拿到原始码流。用浏览器插件导出 Netscape 格式的 cookies.txt，放到项目的 <code>config/cookies.txt</code>，重启服务即可。</p>
+    </details>
+    <details class="faq">
+      <summary>为什么要下载到服务器再转给我？</summary>
+      <p>平台对视频直链做了防盗链和签名校验，浏览器直接访问会 403。服务器携带正确的 Referer 拉流后再输出，才能稳定拿到无水印原画。文件仅保存在你本机的 downloads 目录。</p>
+    </details>
+    <details class="faq">
+      <summary>画质增强能提升多少？</summary>
+      <p>分辨率提升使用 Lanczos 重采样，边缘更干净，但无法凭空生成细节；帧率提升使用 minterpolate 运动补偿插帧，画面更顺滑，适合动画、运动镜头。两者都会重新编码，原片建议保留。</p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <div>无痕视频下载 · 本地运行，文件不出本机</div>
+  <div class="footer-warn">仅供个人备份与学习研究使用，请勿用于商业传播，下载内容版权归原作者所有。</div>
+</footer>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<div class="modal" id="guideModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">×</button>
+    <h2>使用说明</h2>
+    <h3>1. 基本流程</h3>
+    <p>粘贴抖音 / B站 / 小红书 / 快手链接 → 解析 → 选择清晰度 → 下载视频、音频或封面。</p>
+    <h3>2. 去水印原理</h3>
+    <p>直接读取平台的原始播放流（非页面上的水印预览版），不做二次压缩，因此没有平台水印、画质也最高。</p>
+    <h3>3. 配置 cookies（可选）</h3>
+    <p>部分内容需要登录态。用浏览器扩展导出 Netscape 格式 cookies，保存为 <code>config/cookies.txt</code>，重启服务后生效。</p>
+    <h3>4. 画质增强</h3>
+    <p>选择目标分辨率与帧率后开始增强，任务在后台运行。插帧与 4K 转码较慢，请耐心等待任务队列完成。</p>
+    <h3>5. 合规提示</h3>
+    <p>请只下载你有权保存的内容，不要用于二次分发或商业用途。</p>
+  </div>
+</div>
+
+<video id="previewVideo" class="preview-video hidden" controls playsinline></video>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

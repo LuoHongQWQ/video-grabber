@@ -1,0 +1,27 @@
+# 运行产物
+downloads/
+cache/
+
+# 本地配置（含访问密码与签名密钥）
+config.json
+config/cookies.txt
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 便携版依赖（体积大，按 README 自行放置）
+tools/ffmpeg.exe
+tools/ffmpeg
+tools/ffprobe.exe
+tools/ffprobe
+
+# 临时文件
+*.log
+*.part
+*.ytdl
+Thumbs.db
+.DS_Store
