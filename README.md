@@ -33,6 +33,12 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## 发布与下载
+
+- Releases 页面提供源码压缩包，解压后按上面的步骤安装依赖即可，无需编译。
+- FFmpeg 体积较大且各平台不同，**不随仓库或源码包分发**，请按「环境要求」自行放置或安装。
+- 升级时只需 `git pull`（或替换源码）后重新 `pip install -r requirements.txt`。
+
 ## 配置
 
 首次启动会自动生成 `config.json`（不入库），并随机生成一个访问密码打印在控制台。
