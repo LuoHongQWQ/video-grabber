@@ -8,7 +8,10 @@ echo  关闭此窗口即可停止服务
 echo ============================================
 
 set "PY=python"
-if exist ".venv\Scripts\python.exe" set "PY=.venv\Scripts\python.exe"
+if exist ".venv\Scripts\python.exe" (
+  ".venv\Scripts\python.exe" -c "import fastapi" >nul 2>nul
+  if not errorlevel 1 set "PY=.venv\Scripts\python.exe"
+)
 if "%VG_HOST%"=="" set "VG_HOST=127.0.0.1"
 if "%VG_PORT%"=="" set "VG_PORT=8000"
 
